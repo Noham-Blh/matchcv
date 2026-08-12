@@ -29,10 +29,9 @@ export function CVUploader({ value, onChange }: CVUploaderProps) {
       try {
         // Chargement dynamique pour éviter d'inclure pdf.js dans le bundle serveur.
         const pdfjsLib = await import("pdfjs-dist");
-        pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-          "pdfjs-dist/build/pdf.worker.min.mjs",
-          import.meta.url
-        ).toString();
+        // Le worker est chargé depuis un CDN plutôt que bundlé localement : Next.js
+        // ne sait pas empaqueter ce fichier worker (module ES autonome) sans erreur de build.
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
