@@ -7,6 +7,9 @@ export interface Profile {
   credits: number;
   plan: PlanType;
   is_admin: boolean;
+  referral_code: string | null;
+  referred_by: string | null;
+  referral_credit_granted: boolean;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
   subscription_status: string | null;
@@ -33,6 +36,14 @@ export interface ClaudeGenerationResult {
   matchScore: number;
   matchedKeywords: string[];
   missingKeywords: string[];
+}
+
+export interface SocialFollowRequest {
+  id: string;
+  user_id: string;
+  platform: "instagram" | "tiktok" | "facebook";
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
 }
 
 // Type minimal de la base Supabase, utilisé par @supabase/ssr pour le typage.

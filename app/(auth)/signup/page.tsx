@@ -1,15 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
 export default function SignupPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignupForm />
+    </Suspense>
+  );
+}
+
+function SignupForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
+  const refCode = searchParams.get("ref");
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,11 +28,17 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<"form" | "code">("form");
 
-  // Étape 2 : vérification du code à 6 chiffres reçu par e-mail.
   const [code, setCode] = useState("");
   const [verifying, setVerifying] = useState(false);
   const [codeError, setCodeError] = useState<string | null>(null);
   const [resent, setResent] = useState(false);
+
+  async function completeReferralIfAny() {
+    // Best-effort : ne bloque jamais la redirection si ça échoue.
+    try {
+      await fetch("/api/referral/complete", { method: "POST" });
+    } catch {}
+  }
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
@@ -39,7 +55,7 @@ export default function SignupPage() {
       email,
       password,
       options: {
-        data: { full_name: fullName },
+        data: { full_name: fullName, ref: refCode || undefined },
       },
     });
 
@@ -53,8 +69,8 @@ export default function SignupPage() {
       return;
     }
 
-    // Si la confirmation par e-mail est désactivée dans Supabase, une session est déjà créée.
     if (data.session) {
+      await completeReferralIfAny();
       router.push("/dashboard");
       router.refresh();
       return;
@@ -62,13 +78,6 @@ export default function SignupPage() {
 
     setStep("code");
     setLoading(false);
-  }
-
-  async function handleGoogleSignup() {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${location.origin}/auth/callback` },
-    });
   }
 
   async function handleVerifyCode(e: React.FormEvent) {
@@ -89,6 +98,7 @@ export default function SignupPage() {
     }
 
     if (data.session) {
+      await completeReferralIfAny();
       router.push("/dashboard");
       router.refresh();
       return;
@@ -150,6 +160,11 @@ export default function SignupPage() {
         </Link>
         <h1 className="mt-6 text-2xl font-semibold tracking-tight">Créer un compte</h1>
         <p className="mt-1 text-sm text-slate-600">1 génération offerte, sans carte bancaire.</p>
+        {refCode && (
+          <p className="mt-2 rounded-lg bg-match/30 px-3 py-2 text-xs text-ink">
+            Tu as été invité par un ami — vous recevrez chacun un crédit une fois ton compte confirmé 🎉
+          </p>
+        )}
 
         <form onSubmit={handleSignup} className="mt-6 space-y-4">
           <div>
