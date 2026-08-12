@@ -151,20 +151,7 @@ export default function SignupPage() {
         <h1 className="mt-6 text-2xl font-semibold tracking-tight">Créer un compte</h1>
         <p className="mt-1 text-sm text-slate-600">1 génération offerte, sans carte bancaire.</p>
 
-        <button
-          onClick={handleGoogleSignup}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-full border border-line bg-white py-2.5 text-sm font-medium hover:border-ink"
-        >
-          Continuer avec Google
-        </button>
-
-        <div className="my-6 flex items-center gap-3">
-          <div className="h-px flex-1 bg-line" />
-          <span className="font-mono text-xs text-slate-400">ou</span>
-          <div className="h-px flex-1 bg-line" />
-        </div>
-
-        <form onSubmit={handleSignup} className="space-y-4">
+        <form onSubmit={handleSignup} className="mt-6 space-y-4">
           <div>
             <label className="text-xs font-medium text-slate-600">Nom complet</label>
             <input

@@ -62,20 +62,7 @@ function LoginForm() {
         <h1 className="mt-6 text-2xl font-semibold tracking-tight">Connexion</h1>
         <p className="mt-1 text-sm text-slate-600">Accédez à vos CV générés et vos crédits.</p>
 
-        <button
-          onClick={handleGoogleLogin}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-full border border-line bg-white py-2.5 text-sm font-medium hover:border-ink"
-        >
-          <GoogleIcon /> Continuer avec Google
-        </button>
-
-        <div className="my-6 flex items-center gap-3">
-          <div className="h-px flex-1 bg-line" />
-          <span className="font-mono text-xs text-slate-400">ou</span>
-          <div className="h-px flex-1 bg-line" />
-        </div>
-
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="mt-6 space-y-4">
           <div>
             <label className="text-xs font-medium text-slate-600">E-mail</label>
             <input
@@ -88,7 +75,12 @@ function LoginForm() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-slate-600">Mot de passe</label>
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-medium text-slate-600">Mot de passe</label>
+              <Link href="/forgot-password" className="text-xs text-cobalt-600 hover:text-cobalt-700">
+                Mot de passe oublié ?
+              </Link>
+            </div>
             <input
               type="password"
               required
