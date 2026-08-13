@@ -1,5 +1,6 @@
 import { Nav } from "@/components/landing/Nav";
 import { Hero } from "@/components/landing/Hero";
+import { TrustBar } from "@/components/landing/TrustBar";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { Pricing } from "@/components/landing/Pricing";
@@ -10,6 +11,7 @@ export default function LandingPage() {
     <main>
       <Nav />
       <Hero />
+      <TrustBar />
       <HowItWorks />
       <Testimonials />
       <Pricing />

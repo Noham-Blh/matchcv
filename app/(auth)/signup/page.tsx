@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import { AuthLayout } from "@/components/app/AuthLayout";
 
 export default function SignupPage() {
   return (
@@ -115,105 +115,98 @@ function SignupForm() {
 
   if (step === "code") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-paper-dim px-5">
-        <Card className="w-full max-w-sm p-8">
-          <h1 className="text-xl font-semibold">Vérifiez votre e-mail</h1>
-          <p className="mt-3 text-sm text-slate-600">
-            Nous avons envoyé un code de vérification à <strong>{email}</strong>. Saisissez-le ci-dessous pour activer
-            votre compte et récupérer votre crédit gratuit.
-          </p>
+      <AuthLayout>
+        <h1 className="text-2xl font-semibold tracking-tight">Vérifiez votre e-mail</h1>
+        <p className="mt-3 text-sm text-slate-600">
+          Nous avons envoyé un code de vérification à <strong>{email}</strong>. Saisissez-le ci-dessous pour
+          activer votre compte et récupérer votre crédit gratuit.
+        </p>
 
-          <form onSubmit={handleVerifyCode} className="mt-6 space-y-4">
-            <input
-              value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 8))}
-              inputMode="numeric"
-              maxLength={8}
-              placeholder="12345678"
-              autoFocus
-              className="w-full rounded-lg border border-line px-3.5 py-3 text-center font-mono text-lg tracking-[0.3em] outline-none focus:border-ink"
-            />
+        <form onSubmit={handleVerifyCode} className="mt-7 space-y-4">
+          <input
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 8))}
+            inputMode="numeric"
+            maxLength={8}
+            placeholder="12345678"
+            autoFocus
+            className="w-full rounded-lg border border-line px-3.5 py-3 text-center font-mono text-lg tracking-[0.3em] outline-none transition-colors focus:border-ink"
+          />
 
-            {codeError && <p className="text-sm text-red-600">{codeError}</p>}
+          {codeError && <p className="text-sm text-red-600">{codeError}</p>}
 
-            <Button type="submit" disabled={verifying || code.length < 6} className="w-full">
-              {verifying ? "Vérification..." : "Valider le code"}
-            </Button>
-          </form>
+          <Button type="submit" disabled={verifying || code.length < 6} className="w-full">
+            {verifying ? "Vérification..." : "Valider le code"}
+          </Button>
+        </form>
 
-          <button
-            onClick={handleResendCode}
-            className="mt-4 w-full text-center text-sm font-medium text-cobalt-600 hover:text-cobalt-700"
-          >
-            {resent ? "Nouveau code envoyé ✓" : "Renvoyer le code"}
-          </button>
-        </Card>
-      </main>
+        <button
+          onClick={handleResendCode}
+          className="mt-5 w-full text-center text-sm font-medium text-cobalt-600 hover:text-cobalt-700"
+        >
+          {resent ? "Nouveau code envoyé ✓" : "Renvoyer le code"}
+        </button>
+      </AuthLayout>
     );
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-paper-dim px-5 py-12">
-      <Card className="w-full max-w-sm p-8">
-        <Link href="/" className="font-display text-lg font-semibold">
-          MatchCV
-        </Link>
-        <h1 className="mt-6 text-2xl font-semibold tracking-tight">Créer un compte</h1>
-        <p className="mt-1 text-sm text-slate-600">1 génération offerte, sans carte bancaire.</p>
-        {refCode && (
-          <p className="mt-2 rounded-lg bg-match/30 px-3 py-2 text-xs text-ink">
-            Tu as été invité par un ami — vous recevrez chacun un crédit une fois ton compte confirmé 🎉
-          </p>
-        )}
-
-        <form onSubmit={handleSignup} className="mt-6 space-y-4">
-          <div>
-            <label className="text-xs font-medium text-slate-600">Nom complet</label>
-            <input
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-line px-3.5 py-2.5 text-sm outline-none focus:border-ink"
-              placeholder="Jeanne Dupont"
-            />
-          </div>
-          <div>
-            <label className="text-xs font-medium text-slate-600">E-mail</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-line px-3.5 py-2.5 text-sm outline-none focus:border-ink"
-              placeholder="vous@exemple.com"
-            />
-          </div>
-          <div>
-            <label className="text-xs font-medium text-slate-600">Mot de passe</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-line px-3.5 py-2.5 text-sm outline-none focus:border-ink"
-              placeholder="8 caractères minimum"
-            />
-          </div>
-
-          {error && <p className="text-sm text-red-600">{error}</p>}
-
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Création..." : "Créer mon compte"}
-          </Button>
-        </form>
-
-        <p className="mt-6 text-center text-sm text-slate-600">
-          Déjà un compte ?{" "}
-          <Link href="/login" className="font-medium text-ink underline underline-offset-2">
-            Se connecter
-          </Link>
+    <AuthLayout>
+      <h1 className="text-2xl font-semibold tracking-tight">Créer un compte</h1>
+      <p className="mt-1.5 text-sm text-slate-600">1 génération offerte, sans carte bancaire.</p>
+      {refCode && (
+        <p className="mt-3 rounded-lg bg-match/30 px-3 py-2 text-xs text-ink">
+          Tu as été invité par un ami — vous recevrez chacun un crédit une fois ton compte confirmé 🎉
         </p>
-      </Card>
-    </main>
+      )}
+
+      <form onSubmit={handleSignup} className="mt-7 space-y-4">
+        <div>
+          <label className="text-xs font-medium text-slate-600">Nom complet</label>
+          <input
+            required
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            className="mt-1.5 w-full rounded-lg border border-line px-3.5 py-2.5 text-sm outline-none transition-colors focus:border-ink"
+            placeholder="Jeanne Dupont"
+          />
+        </div>
+        <div>
+          <label className="text-xs font-medium text-slate-600">E-mail</label>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="mt-1.5 w-full rounded-lg border border-line px-3.5 py-2.5 text-sm outline-none transition-colors focus:border-ink"
+            placeholder="vous@exemple.com"
+          />
+        </div>
+        <div>
+          <label className="text-xs font-medium text-slate-600">Mot de passe</label>
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="mt-1.5 w-full rounded-lg border border-line px-3.5 py-2.5 text-sm outline-none transition-colors focus:border-ink"
+            placeholder="8 caractères minimum"
+          />
+        </div>
+
+        {error && <p className="text-sm text-red-600">{error}</p>}
+
+        <Button type="submit" disabled={loading} className="w-full">
+          {loading ? "Création..." : "Créer mon compte"}
+        </Button>
+      </form>
+
+      <p className="mt-7 text-center text-sm text-slate-600">
+        Déjà un compte ?{" "}
+        <Link href="/login" className="font-medium text-ink underline underline-offset-2">
+          Se connecter
+        </Link>
+      </p>
+    </AuthLayout>
   );
 }
