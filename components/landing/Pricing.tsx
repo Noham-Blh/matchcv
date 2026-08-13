@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/Button";
-import { Check } from "lucide-react";
+import { Check, Compass, Layers, Infinity as InfinityIcon } from "lucide-react";
 
 const PLANS = [
   {
@@ -11,6 +11,7 @@ const PLANS = [
     cta: "Créer un compte",
     href: "/signup",
     variant: "secondary" as const,
+    icon: Compass,
   },
   {
     name: "Pack 5 crédits",
@@ -27,6 +28,7 @@ const PLANS = [
     href: "/signup?plan=credits",
     variant: "primary" as const,
     highlighted: true,
+    icon: Layers,
   },
   {
     name: "Illimité",
@@ -42,6 +44,7 @@ const PLANS = [
     cta: "S'abonner",
     href: "/signup?plan=subscription",
     variant: "secondary" as const,
+    icon: InfinityIcon,
   },
 ];
 
@@ -65,7 +68,7 @@ export function Pricing() {
               key={plan.name}
               className={
                 plan.highlighted
-                  ? "relative rounded-2xl border-2 border-ink bg-ink text-white p-8 shadow-card"
+                  ? "relative rounded-2xl border-2 border-ink bg-ink p-8 text-white shadow-[0_20px_50px_-15px_rgba(198,255,61,0.35)]"
                   : "relative rounded-2xl border border-line bg-white p-8 shadow-card"
               }
             >
@@ -74,7 +77,16 @@ export function Pricing() {
                   Le plus choisi
                 </span>
               )}
-              <h3 className="font-display text-lg font-semibold">{plan.name}</h3>
+              <span
+                className={
+                  plan.highlighted
+                    ? "flex h-9 w-9 items-center justify-center rounded-lg bg-match/20 text-match"
+                    : "flex h-9 w-9 items-center justify-center rounded-lg bg-cobalt-50 text-cobalt-600"
+                }
+              >
+                <plan.icon className="h-4.5 w-4.5" />
+              </span>
+              <h3 className="mt-4 font-display text-lg font-semibold">{plan.name}</h3>
               <div className="mt-4 flex items-baseline gap-1.5">
                 <span className="text-4xl font-semibold tracking-tight">{plan.price}</span>
                 {plan.period && (

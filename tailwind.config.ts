@@ -59,10 +59,15 @@ const config: Config = {
           "0%": { backgroundSize: "0% 100%" },
           "100%": { backgroundSize: "100% 100%" },
         },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
       },
       animation: {
         scan: "scan 3.2s cubic-bezier(0.65,0,0.35,1) infinite",
         "fade-up": "fade-up 0.6s ease-out both",
+        float: "float 4.5s ease-in-out infinite",
       },
       boxShadow: {
         card: "0 1px 2px rgba(18,20,28,0.04), 0 8px 24px -8px rgba(18,20,28,0.10)",

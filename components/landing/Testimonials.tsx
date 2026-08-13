@@ -5,6 +5,7 @@ const TESTIMONIALS = [
     quote:
       "J'envoyais des candidatures depuis trois mois sans retour. Après avoir réécrit mon CV avec MatchCV pour cibler le vocabulaire exact des offres, j'ai eu deux entretiens la même semaine.",
     result: "2 entretiens en 7 jours",
+    accent: "bg-cobalt-500",
   },
   {
     name: "Karim Belhadj",
@@ -12,6 +13,7 @@ const TESTIMONIALS = [
     quote:
       "Le score ATS m'a permis de voir concrètement quelles compétences je devais mettre en avant selon l'offre. La lettre générée sert vraiment de base solide, je n'ai eu qu'à l'ajuster.",
     result: "Score ATS passé de 41% à 88%",
+    accent: "bg-ink",
   },
   {
     name: "Sophie Laurent",
@@ -19,8 +21,17 @@ const TESTIMONIALS = [
     quote:
       "Changer de secteur, c'était surtout un problème de mots. MatchCV a traduit mon expérience RH en compétences que les recruteurs marketing comprenaient tout de suite.",
     result: "Reconversion réussie en 6 semaines",
+    accent: "bg-match",
   },
 ];
+
+function initials(name: string) {
+  return name
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .toUpperCase();
+}
 
 export function Testimonials() {
   return (
@@ -35,15 +46,27 @@ export function Testimonials() {
           {TESTIMONIALS.map((t) => (
             <div
               key={t.name}
-              className="flex flex-col justify-between rounded-2xl border border-line bg-white p-7 shadow-card"
+              className="flex flex-col justify-between overflow-hidden rounded-2xl border border-line bg-white shadow-card"
             >
-              <p className="text-[15px] leading-relaxed text-ink/90">&ldquo;{t.quote}&rdquo;</p>
-              <div className="mt-7">
-                <div className="inline-block rounded-full bg-match/40 px-3 py-1 font-mono text-[11px] font-medium text-ink">
-                  {t.result}
+              <div className={`h-1.5 w-full ${t.accent}`} />
+              <div className="flex flex-1 flex-col justify-between p-7 pt-6">
+                <p className="text-[15px] leading-relaxed text-ink/90">&ldquo;{t.quote}&rdquo;</p>
+                <div className="mt-7">
+                  <div className="inline-block rounded-full bg-match/40 px-3 py-1 font-mono text-[11px] font-medium text-ink">
+                    {t.result}
+                  </div>
+                  <div className="mt-4 flex items-center gap-3">
+                    <span
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-white ${t.accent} ${t.accent === "bg-match" ? "!text-ink" : ""}`}
+                    >
+                      {initials(t.name)}
+                    </span>
+                    <div>
+                      <p className="text-sm font-medium">{t.name}</p>
+                      <p className="text-xs text-slate-500">{t.role}</p>
+                    </div>
+                  </div>
                 </div>
-                <p className="mt-4 text-sm font-medium">{t.name}</p>
-                <p className="text-xs text-slate-500">{t.role}</p>
               </div>
             </div>
           ))}
