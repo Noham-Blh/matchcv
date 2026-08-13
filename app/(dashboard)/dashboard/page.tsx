@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { FileText, ArrowRight, Sparkles } from "lucide-react";
 import { ReferralCard } from "@/components/app/ReferralCard";
 import { SocialFollowCard } from "@/components/app/SocialFollowCard";
+import { CreditsLine } from "@/components/app/CreditsLine";
 
 export default async function DashboardPage() {
   const supabase = createClient();
@@ -41,11 +42,11 @@ export default async function DashboardPage() {
           <h1 className="text-2xl font-semibold tracking-tight">
             Bonjour {profile?.full_name?.split(" ")[0] || ""} 👋
           </h1>
-          <p className="mt-1 text-sm text-slate-600">
-            {profile?.plan === "subscription"
-              ? "Vous avez un accès illimité."
-              : `Il vous reste ${profile?.credits ?? 0} crédit${profile?.credits === 1 ? "" : "s"}.`}
-          </p>
+          <CreditsLine
+            userId={user!.id}
+            credits={profile?.credits ?? 0}
+            hasSubscription={profile?.plan === "subscription" && profile?.subscription_status === "active"}
+          />
         </div>
         <Link
           href="/generate"
