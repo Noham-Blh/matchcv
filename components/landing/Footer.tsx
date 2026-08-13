@@ -16,6 +16,9 @@ export function Footer() {
         <div className="flex gap-5 font-mono text-xs text-slate-500">
           <Link href="/login" className="hover:text-ink">Connexion</Link>
           <a href="#pricing" className="hover:text-ink">Tarifs</a>
+          <Link href="/mentions-legales" className="hover:text-ink">Mentions légales</Link>
+          <Link href="/cgv" className="hover:text-ink">CGV</Link>
+          <Link href="/confidentialite" className="hover:text-ink">Confidentialité</Link>
         </div>
       </div>
     </footer>

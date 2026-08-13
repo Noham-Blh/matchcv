@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Check, Loader2 } from "lucide-react";
 
 async function redirectToCheckout(mode: "credits" | "subscription") {
@@ -21,6 +22,7 @@ async function redirectToPortal() {
 
 export default function BillingPage() {
   const [loading, setLoading] = useState<string | null>(null);
+  const [accepted, setAccepted] = useState(false);
 
   async function handleClick(action: () => Promise<void>, key: string) {
     setLoading(key);
@@ -53,8 +55,8 @@ export default function BillingPage() {
           </ul>
           <button
             onClick={() => handleClick(() => redirectToCheckout("credits"), "credits")}
-            disabled={loading !== null}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white hover:bg-cobalt-700 disabled:opacity-60"
+            disabled={loading !== null || !accepted}
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white hover:bg-cobalt-700 disabled:opacity-40"
           >
             {loading === "credits" && <Loader2 className="h-4 w-4 animate-spin" />}
             Acheter le pack
@@ -77,14 +79,32 @@ export default function BillingPage() {
           </ul>
           <button
             onClick={() => handleClick(() => redirectToCheckout("subscription"), "subscription")}
-            disabled={loading !== null}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-match px-5 py-2.5 text-sm font-medium text-ink hover:bg-match/90 disabled:opacity-60"
+            disabled={loading !== null || !accepted}
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-match px-5 py-2.5 text-sm font-medium text-ink hover:bg-match/90 disabled:opacity-40"
           >
             {loading === "subscription" && <Loader2 className="h-4 w-4 animate-spin" />}
             S&apos;abonner
           </button>
         </div>
       </div>
+
+      <label className="mt-6 flex items-start gap-2.5 text-xs text-slate-600">
+        <input
+          type="checkbox"
+          checked={accepted}
+          onChange={(e) => setAccepted(e.target.checked)}
+          className="mt-0.5 h-4 w-4 rounded border-line"
+        />
+        <span>
+          J&apos;accepte les{" "}
+          <Link href="/cgv" target="_blank" className="underline hover:text-ink">
+            Conditions Générales de Vente
+          </Link>{" "}
+          et je demande l&apos;exécution immédiate du service, ce qui implique la renonciation à mon
+          droit de rétractation de 14 jours conformément à l&apos;article L221-28 du Code de la
+          consommation.
+        </span>
+      </label>
 
       <div className="mt-8 rounded-2xl border border-line bg-white p-6">
         <h3 className="text-sm font-medium">Gérer mon abonnement</h3>
