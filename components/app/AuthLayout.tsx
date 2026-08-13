@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ShieldCheck, Zap, Lock } from "lucide-react";
+import { LogoMark } from "@/components/ui/Logo";
 
 const TRUST_POINTS = [
   { icon: Zap, text: "1 génération offerte, sans carte bancaire" },
@@ -16,9 +17,7 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
         <div className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-match/10 blur-3xl" />
 
         <Link href="/" className="relative flex items-center gap-2 font-display text-lg font-semibold">
-          <span className="flex h-7 w-7 items-center justify-center rounded bg-match text-[12px] font-bold text-ink">
-            M
-          </span>
+          <LogoMark className="h-8 w-8" variant="bare" />
           MatchCV
         </Link>
 
@@ -59,9 +58,7 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
           href="/"
           className="mb-8 flex items-center gap-2 font-display text-lg font-semibold lg:hidden"
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded bg-ink text-[11px] font-bold text-match">
-            M
-          </span>
+          <LogoMark className="h-7 w-7" />
           MatchCV
         </Link>
         <div className="mx-auto w-full max-w-sm">{children}</div>

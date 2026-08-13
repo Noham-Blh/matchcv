@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { LogoMark } from "@/components/ui/Logo";
 
 export function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-white/80 backdrop-blur-md">
       <div className="container-page flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-display text-lg font-semibold tracking-tight">
-          <span className="flex h-6 w-6 items-center justify-center rounded bg-ink text-[11px] font-bold text-match">
-            M
-          </span>
+          <LogoMark className="h-7 w-7" />
           MatchCV
         </Link>
 

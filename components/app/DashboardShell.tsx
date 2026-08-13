@@ -17,6 +17,7 @@ import {
 import clsx from "clsx";
 import { createClient } from "@/lib/supabase/client";
 import { useLiveCredits } from "@/lib/hooks/useLiveCredits";
+import { LogoMark } from "@/components/ui/Logo";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -65,9 +66,7 @@ export function DashboardShell({
       {/* Barre du haut, visible uniquement sur mobile */}
       <div className="flex h-14 items-center justify-between border-b border-line bg-white px-4 lg:hidden">
         <Link href="/dashboard" className="flex items-center gap-2 font-display text-base font-semibold">
-          <span className="flex h-6 w-6 items-center justify-center rounded bg-ink text-[11px] font-bold text-match">
-            M
-          </span>
+          <LogoMark className="h-7 w-7" />
           MatchCV
         </Link>
         <button
@@ -97,9 +96,7 @@ export function DashboardShell({
       >
         <div className="flex h-16 items-center justify-between px-5">
           <Link href="/dashboard" className="flex items-center gap-2 font-display text-base font-semibold">
-            <span className="flex h-6 w-6 items-center justify-center rounded bg-ink text-[11px] font-bold text-match">
-              M
-            </span>
+            <LogoMark className="h-7 w-7" />
             MatchCV
           </Link>
           <button
