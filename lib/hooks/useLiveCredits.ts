@@ -3,23 +3,22 @@
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
+const POLL_INTERVAL_MS = 4000;
+
 /**
- * S'abonne en direct (Supabase Realtime) aux changements de crédits / plan
- * d'un profil, pour que l'affichage se mette à jour tout seul dès qu'un
- * crédit est ajouté (parrainage, réseau social, achat, etc.), sans que
- * l'utilisateur ait besoin de recharger la page.
+ * Vérifie régulièrement (toutes les 4 secondes, + à chaque retour sur l'onglet)
+ * les crédits / le plan d'un profil, pour que l'affichage se mette à jour tout
+ * seul dès qu'un crédit est ajouté (parrainage, réseau social, achat, etc.),
+ * sans que l'utilisateur ait besoin de recharger la page.
  *
- * Nécessite que la table "profiles" soit ajoutée à la publication Realtime
- * de Supabase (voir supabase/006_realtime.sql).
+ * On utilise un simple sondage (polling) plutôt que les WebSockets Supabase
+ * Realtime : plus simple, et ça fonctionne même sur les réseaux qui bloquent
+ * les connexions WebSocket (proxys d'entreprise, certains antivirus...).
  */
 export function useLiveCredits(userId: string, initialCredits: number, initialHasSubscription: boolean) {
   const [credits, setCredits] = useState(initialCredits);
   const [hasSubscription, setHasSubscription] = useState(initialHasSubscription);
-
-  // Suffixe unique par instance : plusieurs composants (badge + texte du dashboard)
-  // peuvent s'abonner en même temps pour le même utilisateur — chacun a besoin de
-  // son propre canal, sinon Supabase Realtime refuse le second abonnement.
-  const instanceId = useRef(Math.random().toString(36).slice(2)).current;
+  const isFetching = useRef(false);
 
   useEffect(() => {
     setCredits(initialCredits);
@@ -30,24 +29,37 @@ export function useLiveCredits(userId: string, initialCredits: number, initialHa
   useEffect(() => {
     if (!userId) return;
     const supabase = createClient();
+    let cancelled = false;
 
-    const channel = supabase
-      .channel(`profile-credits-${userId}-${instanceId}`)
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "profiles", filter: `id=eq.${userId}` },
-        (payload) => {
-          const row = payload.new as { credits: number; plan: string; subscription_status: string | null };
-          setCredits(row.credits);
-          setHasSubscription(row.plan === "subscription" && row.subscription_status === "active");
-        }
-      )
-      .subscribe();
+    async function fetchCredits() {
+      if (isFetching.current) return;
+      isFetching.current = true;
+      const { data } = await supabase
+        .from("profiles")
+        .select("credits, plan, subscription_status")
+        .eq("id", userId)
+        .single();
+      isFetching.current = false;
+      if (!data || cancelled) return;
+      setCredits(data.credits);
+      setHasSubscription(data.plan === "subscription" && data.subscription_status === "active");
+    }
+
+    const interval = setInterval(fetchCredits, POLL_INTERVAL_MS);
+
+    function onFocus() {
+      fetchCredits();
+    }
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
 
     return () => {
-      supabase.removeChannel(channel);
+      cancelled = true;
+      clearInterval(interval);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
     };
-  }, [userId, instanceId]);
+  }, [userId]);
 
   return { credits, hasSubscription };
 }
