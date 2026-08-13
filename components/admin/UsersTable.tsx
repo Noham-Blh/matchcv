@@ -48,12 +48,14 @@ function UserRow({ user }: { user: AdminUserRow }) {
   const [subStatus, setSubStatus] = useState(user.subscription_status || "");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const dirty = credits !== user.credits || plan !== user.plan || subStatus !== (user.subscription_status || "");
 
   async function handleSave() {
     setSaving(true);
     setSaved(false);
+    setError(null);
     try {
       const res = await fetch("/api/admin/update-user", {
         method: "POST",
@@ -69,7 +71,12 @@ function UserRow({ user }: { user: AdminUserRow }) {
         setSaved(true);
         router.refresh();
         setTimeout(() => setSaved(false), 2000);
+      } else {
+        const body = await res.json().catch(() => null);
+        setError(body?.error || `Erreur ${res.status}`);
       }
+    } catch (e) {
+      setError("Impossible de contacter le serveur.");
     } finally {
       setSaving(false);
     }
@@ -120,18 +127,21 @@ function UserRow({ user }: { user: AdminUserRow }) {
         {new Date(user.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" })}
       </td>
       <td className="px-5 py-3.5">
-        <button
-          onClick={handleSave}
-          disabled={!dirty || saving}
-          className="flex items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-xs font-medium text-white disabled:opacity-30"
-        >
-          {saving ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : saved ? (
-            <Check className="h-3.5 w-3.5" />
-          ) : null}
-          {saved ? "Enregistré" : "Enregistrer"}
-        </button>
+        <div className="flex flex-col items-start gap-1">
+          <button
+            onClick={handleSave}
+            disabled={!dirty || saving}
+            className="flex items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-xs font-medium text-white disabled:opacity-30"
+          >
+            {saving ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : saved ? (
+              <Check className="h-3.5 w-3.5" />
+            ) : null}
+            {saved ? "Enregistré" : "Enregistrer"}
+          </button>
+          {error && <p className="max-w-[160px] text-[11px] text-red-600">{error}</p>}
+        </div>
       </td>
     </tr>
   );
