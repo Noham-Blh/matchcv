@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { FileText, ArrowRight, Sparkles, Clock3 } from "lucide-react";
-import { ReferralCard } from "@/components/app/ReferralCard";
-import { SocialFollowCard } from "@/components/app/SocialFollowCard";
+import { FileText, ArrowRight, Sparkles } from "lucide-react";
+import { EarnCreditsPanel } from "@/components/app/EarnCreditsPanel";
 import { CreditsLine } from "@/components/app/CreditsLine";
 
 export default async function DashboardPage() {
@@ -37,9 +36,9 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <div className="mb-8 flex flex-col justify-between gap-5 overflow-hidden rounded-[28px] bg-white p-6 shadow-elevated sm:flex-row sm:items-center sm:p-7">
+      <div className="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
         <div>
-          <h1 className="font-display text-2xl font-semibold tracking-tight">
+          <h1 className="font-display text-4xl font-semibold tracking-tight">
             Bonjour {profile?.full_name?.split(" ")[0] || ""} 👋
           </h1>
           <CreditsLine
@@ -50,26 +49,24 @@ export default async function DashboardPage() {
         </div>
         <Link
           href="/generate"
-          className="flex shrink-0 items-center justify-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white shadow-[0_8px_24px_-8px_rgba(18,20,28,0.5)] hover:bg-cobalt-700"
+          className="flex shrink-0 items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-white shadow-[0_8px_24px_-8px_rgba(18,20,28,0.5)] hover:bg-cobalt-700"
         >
           <Sparkles className="h-4 w-4" /> Nouvelle génération
         </Link>
       </div>
 
       {profile?.referral_code && (
-        <div className="mb-8 grid gap-4 sm:grid-cols-2">
-          <ReferralCard referralCode={profile.referral_code} referralCount={referralCount ?? 0} />
-          <SocialFollowCard requestedPlatforms={socialRequests ?? []} />
-        </div>
+        <EarnCreditsPanel
+          referralCode={profile.referral_code}
+          referralCount={referralCount ?? 0}
+          requestedPlatforms={socialRequests ?? []}
+        />
       )}
 
-      <div className="mb-4 flex items-center gap-2">
-        <Clock3 className="h-4 w-4 text-slate-400" />
-        <h2 className="text-sm font-medium text-slate-600">Historique</h2>
-      </div>
+      <h2 className="mb-5 font-display text-lg font-semibold">Historique</h2>
 
       {!generations || generations.length === 0 ? (
-        <div className="rounded-[28px] border border-dashed border-line bg-white p-12 text-center">
+        <div className="py-14 text-center">
           <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-cobalt-50">
             <FileText className="h-6 w-6 text-cobalt-500" />
           </span>
@@ -84,37 +81,37 @@ export default async function DashboardPage() {
           </Link>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-[28px] bg-white shadow-elevated">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-line bg-paper-dim text-left font-mono text-[11px] uppercase tracking-wide text-slate-500">
-                <th className="px-5 py-3 font-medium">Poste</th>
-                <th className="px-5 py-3 font-medium">Entreprise</th>
-                <th className="px-5 py-3 font-medium">Score ATS</th>
-                <th className="px-5 py-3 font-medium">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {generations.map((g) => (
-                <tr key={g.id} className="border-b border-line last:border-0 hover:bg-paper-dim">
-                  <td className="px-5 py-3.5 font-medium">{g.job_title || "Sans titre"}</td>
-                  <td className="px-5 py-3.5 text-slate-600">{g.company_name || "—"}</td>
-                  <td className="px-5 py-3.5">
-                    <span className="rounded-full bg-match/40 px-2.5 py-0.5 font-mono text-xs font-medium">
-                      {g.match_score ?? "—"}%
-                    </span>
-                  </td>
-                  <td className="px-5 py-3.5 text-slate-500">
-                    {new Date(g.created_at).toLocaleDateString("fr-FR", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div>
+          <div className="flex border-b border-line px-2 pb-3 font-mono text-[11px] uppercase tracking-wide text-slate-500">
+            <span className="flex-1">Poste</span>
+            <span className="hidden w-40 sm:block">Entreprise</span>
+            <span className="w-20">Score</span>
+            <span className="w-24 text-right">Date</span>
+          </div>
+          {generations.map((g) => (
+            <div
+              key={g.id}
+              className="flex items-center border-b border-line px-2 py-4 last:border-0 hover:bg-white/60"
+            >
+              <div className="flex-1 pr-4">
+                <p className="font-medium">{g.job_title || "Sans titre"}</p>
+                <p className="mt-0.5 text-xs text-slate-500 sm:hidden">{g.company_name || "—"}</p>
+              </div>
+              <span className="hidden w-40 text-sm text-slate-600 sm:block">{g.company_name || "—"}</span>
+              <span className="w-20">
+                <span className="rounded-full bg-match/40 px-2.5 py-0.5 font-mono text-xs font-medium">
+                  {g.match_score ?? "—"}%
+                </span>
+              </span>
+              <span className="w-24 text-right text-xs text-slate-500">
+                {new Date(g.created_at).toLocaleDateString("fr-FR", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </span>
+            </div>
+          ))}
         </div>
       )}
     </div>

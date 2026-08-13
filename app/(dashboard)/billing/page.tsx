@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Check, Loader2 } from "lucide-react";
+import { Check, Loader2, Layers, Infinity as InfinityIcon } from "lucide-react";
 
 async function redirectToCheckout(mode: "credits" | "subscription") {
   const res = await fetch("/api/stripe/checkout", {
@@ -35,41 +35,48 @@ export default function BillingPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Facturation</h1>
-      <p className="mt-1 text-sm text-slate-600">
+      <h1 className="font-display text-4xl font-semibold tracking-tight">Facturation</h1>
+      <p className="mt-2 text-slate-600">
         Achetez des crédits à l&apos;unité ou passez à l&apos;abonnement illimité (paiement sécurisé via Stripe, mode test).
       </p>
 
-      <div className="mt-8 grid gap-6 sm:grid-cols-2">
-        <div className="rounded-2xl border border-line bg-white p-7 shadow-card">
-          <h2 className="font-display text-lg font-semibold">Pack 5 crédits</h2>
-          <div className="mt-3 text-3xl font-semibold">12€</div>
+      <div className="mt-10 grid gap-6 sm:grid-cols-2">
+        <div className="relative overflow-hidden rounded-[36px] bg-cobalt-50 p-8">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-cobalt-600">
+            <Layers className="h-5 w-5" />
+          </span>
+          <h2 className="mt-5 font-display text-lg font-semibold">Pack 5 crédits</h2>
+          <div className="mt-2 text-4xl font-semibold tracking-tight">12€</div>
           <p className="mt-1 text-xs text-slate-500">Paiement unique, sans expiration</p>
-          <ul className="mt-5 space-y-2 text-sm">
+          <ul className="mt-6 space-y-2.5 text-sm">
             <li className="flex items-center gap-2">
-              <Check className="h-4 w-4 text-cobalt-500" /> 5 générations CV + lettre
+              <Check className="h-4 w-4 text-cobalt-600" /> 5 générations CV + lettre
             </li>
             <li className="flex items-center gap-2">
-              <Check className="h-4 w-4 text-cobalt-500" /> Export PDF illimité
+              <Check className="h-4 w-4 text-cobalt-600" /> Export PDF illimité
             </li>
           </ul>
           <button
             onClick={() => handleClick(() => redirectToCheckout("credits"), "credits")}
             disabled={loading !== null || !accepted}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white hover:bg-cobalt-700 disabled:opacity-40"
+            className="mt-7 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-medium text-white hover:bg-cobalt-700 disabled:opacity-40"
           >
             {loading === "credits" && <Loader2 className="h-4 w-4 animate-spin" />}
             Acheter le pack
           </button>
         </div>
 
-        <div className="rounded-2xl border-2 border-ink bg-ink p-7 text-white shadow-card">
-          <h2 className="font-display text-lg font-semibold">Illimité</h2>
-          <div className="mt-3 text-3xl font-semibold">
+        <div className="relative overflow-hidden rounded-[36px] bg-ink p-8 text-white">
+          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-match/20 blur-[70px]" />
+          <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-match">
+            <InfinityIcon className="h-5 w-5" />
+          </span>
+          <h2 className="relative mt-5 font-display text-lg font-semibold">Illimité</h2>
+          <div className="relative mt-2 text-4xl font-semibold tracking-tight">
             19€<span className="text-sm font-normal text-white/60"> / mois</span>
           </div>
-          <p className="mt-1 text-xs text-white/60">Résiliable à tout moment</p>
-          <ul className="mt-5 space-y-2 text-sm">
+          <p className="relative mt-1 text-xs text-white/60">Résiliable à tout moment</p>
+          <ul className="relative mt-6 space-y-2.5 text-sm">
             <li className="flex items-center gap-2">
               <Check className="h-4 w-4 text-match" /> Générations illimitées
             </li>
@@ -80,7 +87,7 @@ export default function BillingPage() {
           <button
             onClick={() => handleClick(() => redirectToCheckout("subscription"), "subscription")}
             disabled={loading !== null || !accepted}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-match px-5 py-2.5 text-sm font-medium text-ink hover:bg-match/90 disabled:opacity-40"
+            className="relative mt-7 flex w-full items-center justify-center gap-2 rounded-full bg-match px-5 py-3 text-sm font-medium text-ink hover:bg-match/90 disabled:opacity-40"
           >
             {loading === "subscription" && <Loader2 className="h-4 w-4 animate-spin" />}
             S&apos;abonner
@@ -88,7 +95,7 @@ export default function BillingPage() {
         </div>
       </div>
 
-      <label className="mt-6 flex items-start gap-2.5 text-xs text-slate-600">
+      <label className="mt-7 flex items-start gap-2.5 text-xs text-slate-600">
         <input
           type="checkbox"
           checked={accepted}
@@ -106,7 +113,7 @@ export default function BillingPage() {
         </span>
       </label>
 
-      <div className="mt-8 rounded-2xl border border-line bg-white p-6">
+      <div className="mt-10 border-t border-line pt-8">
         <h3 className="text-sm font-medium">Gérer mon abonnement</h3>
         <p className="mt-1 text-xs text-slate-500">
           Modifiez votre moyen de paiement, consultez vos factures ou résiliez votre abonnement.
@@ -114,7 +121,7 @@ export default function BillingPage() {
         <button
           onClick={() => handleClick(redirectToPortal, "portal")}
           disabled={loading !== null}
-          className="mt-4 rounded-full border border-line px-4 py-2 text-xs font-medium hover:border-ink disabled:opacity-60"
+          className="mt-4 rounded-full bg-paper-dim px-4 py-2 text-xs font-medium hover:bg-line disabled:opacity-60"
         >
           {loading === "portal" ? "Redirection..." : "Ouvrir l'espace client Stripe"}
         </button>

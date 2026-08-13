@@ -55,17 +55,15 @@ export function CVUploader({ value, onChange }: CVUploaderProps) {
 
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-cobalt-50 text-cobalt-600">
-            <FileText className="h-3.5 w-3.5" />
-          </span>
-          <label className="text-sm font-medium">Votre CV actuel</label>
-        </div>
+      <div className="mb-4 flex items-center gap-2">
+        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-cobalt-50 text-cobalt-600">
+          <FileText className="h-3.5 w-3.5" />
+        </span>
+        <label className="text-sm font-medium">Votre CV actuel</label>
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-1.5 font-mono text-xs text-cobalt-600 hover:text-cobalt-700"
+          className="ml-auto flex items-center gap-1.5 font-mono text-xs text-cobalt-600 hover:text-cobalt-700"
         >
           <UploadCloud className="h-3.5 w-3.5" /> Importer un PDF ou .txt
         </button>
@@ -91,7 +89,7 @@ export function CVUploader({ value, onChange }: CVUploaderProps) {
         onChange={(e) => onChange(e.target.value)}
         placeholder="Collez ici le texte complet de votre CV : expériences, formations, compétences..."
         rows={14}
-        className="w-full resize-none rounded-xl border border-line bg-paper-dim/60 p-4 text-sm leading-relaxed outline-none transition-colors focus:border-cobalt-400 focus:bg-white focus:ring-4 focus:ring-cobalt-100"
+        className="w-full resize-none rounded-[28px] border-0 bg-cobalt-50/60 p-5 text-sm leading-relaxed outline-none ring-0 transition-colors focus:bg-cobalt-50"
       />
       <p className="mt-1.5 text-right font-mono text-[11px] text-slate-400">
         {value.length.toLocaleString("fr-FR")} caractères
