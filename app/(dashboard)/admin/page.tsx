@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { UsersTable, type AdminUserRow } from "@/components/admin/UsersTable";
+import { AdminSocialRequests, type PendingSocialRequest } from "@/components/admin/AdminSocialRequests";
 import { ShieldCheck } from "lucide-react";
 
 export default async function AdminPage() {
@@ -55,6 +56,20 @@ export default async function AdminPage() {
     activeSubs: users.filter((u) => u.plan === "subscription" && u.subscription_status === "active").length,
   };
 
+  const { data: pendingSocial } = await adminClient
+    .from("social_follow_requests")
+    .select("id, platform, created_at, user_id")
+    .eq("status", "pending")
+    .order("created_at", { ascending: true });
+
+  const emailByUserId = new Map(users.map((u) => [u.id, u.email]));
+  const pendingSocialRequests: PendingSocialRequest[] = (pendingSocial || []).map((r: any) => ({
+    id: r.id,
+    platform: r.platform,
+    created_at: r.created_at,
+    userEmail: emailByUserId.get(r.user_id) || "—",
+  }));
+
   return (
     <div>
       <div className="mb-6 flex items-center gap-2">
@@ -68,6 +83,14 @@ export default async function AdminPage() {
         <StatCard label="Abonnements actifs" value={totals.activeSubs} />
       </div>
 
+      <h2 className="mb-3 text-sm font-medium text-slate-600">
+        Demandes de crédit "réseaux sociaux" en attente
+      </h2>
+      <div className="mb-10">
+        <AdminSocialRequests requests={pendingSocialRequests} />
+      </div>
+
+      <h2 className="mb-3 text-sm font-medium text-slate-600">Utilisateurs</h2>
       <UsersTable users={users} />
     </div>
   );

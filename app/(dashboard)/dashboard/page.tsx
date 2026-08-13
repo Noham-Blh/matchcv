@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { FileText, ArrowRight, Sparkles } from "lucide-react";
+import { ReferralCard } from "@/components/app/ReferralCard";
+import { SocialFollowCard } from "@/components/app/SocialFollowCard";
 
 export default async function DashboardPage() {
   const supabase = createClient();
@@ -20,6 +22,17 @@ export default async function DashboardPage() {
     .eq("user_id", user!.id)
     .order("created_at", { ascending: false })
     .limit(20);
+
+  const { count: referralCount } = await supabase
+    .from("profiles")
+    .select("id", { count: "exact", head: true })
+    .eq("referred_by", user!.id)
+    .eq("referral_credit_granted", true);
+
+  const { data: socialRequests } = await supabase
+    .from("social_follow_requests")
+    .select("platform, status")
+    .eq("user_id", user!.id);
 
   return (
     <div>
@@ -41,6 +54,13 @@ export default async function DashboardPage() {
           <Sparkles className="h-4 w-4" /> Nouvelle génération
         </Link>
       </div>
+
+      {profile?.referral_code && (
+        <div className="mb-8 grid gap-4 sm:grid-cols-2">
+          <ReferralCard referralCode={profile.referral_code} referralCount={referralCount ?? 0} />
+          <SocialFollowCard requestedPlatforms={socialRequests ?? []} />
+        </div>
+      )}
 
       <h2 className="mb-4 text-sm font-medium text-slate-600">Historique</h2>
 
