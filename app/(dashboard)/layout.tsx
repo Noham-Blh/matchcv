@@ -44,6 +44,7 @@ export default async function DashboardLayout({
 
           <div className="flex items-center gap-4">
             <CreditsBadge
+              userId={user.id}
               credits={profile?.credits ?? 0}
               hasSubscription={profile?.plan === "subscription" && profile?.subscription_status === "active"}
             />
