@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Instagram, Facebook, Music2, Check, Loader2 } from "lucide-react";
+import { Instagram, Facebook, Music2, Check, Loader2, Sparkles } from "lucide-react";
 
 // Comptes officiels MatchCV.
 const PLATFORMS = [
@@ -76,42 +76,53 @@ export function SocialFollowCard({
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-white p-6 shadow-card">
-      <h3 className="text-sm font-medium">Suis-nous, gagne un crédit</h3>
-      <p className="mt-1.5 text-xs text-slate-500">
-        Clique sur un réseau pour aller le suivre : ton crédit est ajouté automatiquement à ton retour.
-      </p>
+    <div className="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
+      <div className="h-1.5 w-full bg-match" />
+      <div className="p-6">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-match/30 text-ink">
+            <Sparkles className="h-4 w-4" />
+          </span>
+          <h3 className="text-sm font-medium">Suis-nous, gagne un crédit</h3>
+        </div>
+        <p className="mt-2.5 text-xs text-slate-500">
+          Clique sur un réseau pour aller le suivre : ton crédit est ajouté automatiquement à ton retour.
+        </p>
 
-      <div className="mt-4 space-y-2">
-        {PLATFORMS.map((p) => {
-          const isCredited = credited.has(p.id);
-          const remaining = counting[p.id];
+        <div className="mt-4 space-y-2">
+          {PLATFORMS.map((p) => {
+            const isCredited = credited.has(p.id);
+            const remaining = counting[p.id];
 
-          return (
-            <button
-              key={p.id}
-              onClick={() => handleClick(p.id, p.url)}
-              disabled={isCredited || remaining !== undefined}
-              className="flex w-full items-center justify-between rounded-lg border border-line px-3 py-2.5 text-left hover:bg-paper-dim disabled:hover:bg-transparent"
-            >
-              <span className="flex items-center gap-2 text-sm font-medium">
-                <p.icon className="h-4 w-4" /> {p.label}
-              </span>
-
-              {isCredited ? (
-                <span className="flex items-center gap-1 font-mono text-xs text-cobalt-600">
-                  <Check className="h-3.5 w-3.5" /> Crédité
+            return (
+              <button
+                key={p.id}
+                onClick={() => handleClick(p.id, p.url)}
+                disabled={isCredited || remaining !== undefined}
+                className="flex w-full items-center justify-between rounded-lg border border-line px-3 py-2.5 text-left hover:border-ink hover:bg-paper-dim disabled:hover:border-line disabled:hover:bg-transparent"
+              >
+                <span className="flex items-center gap-2.5 text-sm font-medium">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-md bg-paper-dim text-ink">
+                    <p.icon className="h-3.5 w-3.5" />
+                  </span>
+                  {p.label}
                 </span>
-              ) : remaining !== undefined ? (
-                <span className="flex items-center gap-1.5 font-mono text-xs text-slate-400">
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" /> {remaining}s
-                </span>
-              ) : (
-                <span className="font-mono text-xs text-cobalt-600">Suivre →</span>
-              )}
-            </button>
-          );
-        })}
+
+                {isCredited ? (
+                  <span className="flex items-center gap-1 font-mono text-xs text-cobalt-600">
+                    <Check className="h-3.5 w-3.5" /> Crédité
+                  </span>
+                ) : remaining !== undefined ? (
+                  <span className="flex items-center gap-1.5 font-mono text-xs text-slate-400">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> {remaining}s
+                  </span>
+                ) : (
+                  <span className="font-mono text-xs text-cobalt-600">Suivre →</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

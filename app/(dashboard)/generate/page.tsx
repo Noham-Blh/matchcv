@@ -56,35 +56,54 @@ export default function GeneratePage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight">Générer une candidature</h1>
-        <p className="mt-1 text-sm text-slate-600">
-          Collez votre CV et l&apos;offre visée. MatchCV réécrit les deux documents pour maximiser vos chances.
-        </p>
+      <div className="mb-8 flex items-center gap-3">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-ink text-match">
+          <Sparkles className="h-5 w-5" />
+        </span>
+        <div>
+          <h1 className="font-display text-2xl font-semibold tracking-tight">Générer une candidature</h1>
+          <p className="mt-0.5 text-sm text-slate-600">
+            Collez votre CV et l&apos;offre visée. MatchCV réécrit les deux documents pour maximiser vos chances.
+          </p>
+        </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <CVUploader value={cvText} onChange={setCvText} />
-        <JobOfferInput
-          value={jobOfferText}
-          onChange={setJobOfferText}
-          jobTitle={jobTitle}
-          onJobTitleChange={setJobTitle}
-          companyName={companyName}
-          onCompanyNameChange={setCompanyName}
-        />
+      <div className="relative grid gap-6 lg:grid-cols-2">
+        <div className="rounded-2xl border border-line bg-white p-6 shadow-card">
+          <CVUploader value={cvText} onChange={setCvText} />
+        </div>
+
+        {/* Connecteur visuel entre les deux colonnes, desktop uniquement */}
+        <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 lg:flex">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-paper-dim bg-match font-display text-base font-bold text-ink shadow-card">
+            +
+          </span>
+        </div>
+
+        <div className="rounded-2xl border border-line bg-white p-6 shadow-card">
+          <JobOfferInput
+            value={jobOfferText}
+            onChange={setJobOfferText}
+            jobTitle={jobTitle}
+            onJobTitleChange={setJobTitle}
+            companyName={companyName}
+            onCompanyNameChange={setCompanyName}
+          />
+        </div>
       </div>
 
-      <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-        <button
-          onClick={handleGenerate}
-          disabled={!canGenerate}
-          className="flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-white hover:bg-cobalt-700 disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-          {loading ? "Génération en cours..." : "Générer mon CV et ma lettre"}
-        </button>
-        <span className="font-mono text-xs text-slate-500">Consomme 1 crédit</span>
+      <div className="mt-6 flex flex-col items-start gap-4 rounded-2xl border border-line bg-white p-5 shadow-card sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleGenerate}
+            disabled={!canGenerate}
+            className="flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-white shadow-[0_8px_24px_-8px_rgba(18,20,28,0.5)] hover:bg-cobalt-700 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
+          >
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            {loading ? "Génération en cours..." : "Générer mon CV et ma lettre"}
+          </button>
+          <span className="font-mono text-xs text-slate-500">Consomme 1 crédit</span>
+        </div>
       </div>
 
       {error && (

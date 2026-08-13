@@ -142,7 +142,9 @@ export function DashboardShell({
       </aside>
 
       {/* Contenu principal */}
-      <main className="flex-1 px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
+      <main className="relative flex-1 overflow-hidden px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
+        <div className="pointer-events-none absolute -right-40 -top-40 -z-10 h-96 w-96 rounded-full bg-cobalt-400/10 blur-[110px]" />
+        <div className="pointer-events-none absolute -left-20 top-1/2 -z-10 h-72 w-72 rounded-full bg-match/10 blur-[110px]" />
         <div className="mx-auto max-w-4xl">{children}</div>
       </main>
     </div>

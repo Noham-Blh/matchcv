@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { FileText, ArrowRight, Sparkles } from "lucide-react";
+import { FileText, ArrowRight, Sparkles, Clock3 } from "lucide-react";
 import { ReferralCard } from "@/components/app/ReferralCard";
 import { SocialFollowCard } from "@/components/app/SocialFollowCard";
 import { CreditsLine } from "@/components/app/CreditsLine";
@@ -37,9 +37,9 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <div className="mb-8 flex flex-col justify-between gap-5 overflow-hidden rounded-2xl border border-line bg-white p-6 shadow-card sm:flex-row sm:items-center sm:p-7">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
+          <h1 className="font-display text-2xl font-semibold tracking-tight">
             Bonjour {profile?.full_name?.split(" ")[0] || ""} 👋
           </h1>
           <CreditsLine
@@ -50,7 +50,7 @@ export default async function DashboardPage() {
         </div>
         <Link
           href="/generate"
-          className="flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white hover:bg-cobalt-700"
+          className="flex shrink-0 items-center justify-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white shadow-[0_8px_24px_-8px_rgba(18,20,28,0.5)] hover:bg-cobalt-700"
         >
           <Sparkles className="h-4 w-4" /> Nouvelle génération
         </Link>
@@ -63,12 +63,17 @@ export default async function DashboardPage() {
         </div>
       )}
 
-      <h2 className="mb-4 text-sm font-medium text-slate-600">Historique</h2>
+      <div className="mb-4 flex items-center gap-2">
+        <Clock3 className="h-4 w-4 text-slate-400" />
+        <h2 className="text-sm font-medium text-slate-600">Historique</h2>
+      </div>
 
       {!generations || generations.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-line bg-white p-12 text-center">
-          <FileText className="mx-auto h-8 w-8 text-slate-300" />
-          <p className="mt-3 text-sm text-slate-600">
+          <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-cobalt-50">
+            <FileText className="h-6 w-6 text-cobalt-500" />
+          </span>
+          <p className="mt-4 text-sm text-slate-600">
             Aucune génération pour l&apos;instant. Créez votre premier CV optimisé.
           </p>
           <Link
@@ -95,7 +100,7 @@ export default async function DashboardPage() {
                   <td className="px-5 py-3.5 font-medium">{g.job_title || "Sans titre"}</td>
                   <td className="px-5 py-3.5 text-slate-600">{g.company_name || "—"}</td>
                   <td className="px-5 py-3.5">
-                    <span className="rounded-full bg-match/40 px-2.5 py-0.5 font-mono text-xs">
+                    <span className="rounded-full bg-match/40 px-2.5 py-0.5 font-mono text-xs font-medium">
                       {g.match_score ?? "—"}%
                     </span>
                   </td>

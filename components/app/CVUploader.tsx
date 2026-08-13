@@ -56,7 +56,12 @@ export function CVUploader({ value, onChange }: CVUploaderProps) {
   return (
     <div>
       <div className="mb-3 flex items-center justify-between">
-        <label className="text-sm font-medium">Votre CV actuel</label>
+        <div className="flex items-center gap-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-cobalt-50 text-cobalt-600">
+            <FileText className="h-3.5 w-3.5" />
+          </span>
+          <label className="text-sm font-medium">Votre CV actuel</label>
+        </div>
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
@@ -86,7 +91,7 @@ export function CVUploader({ value, onChange }: CVUploaderProps) {
         onChange={(e) => onChange(e.target.value)}
         placeholder="Collez ici le texte complet de votre CV : expériences, formations, compétences..."
         rows={14}
-        className="w-full resize-none rounded-xl border border-line bg-white p-4 text-sm leading-relaxed outline-none focus:border-ink"
+        className="w-full resize-none rounded-xl border border-line bg-paper-dim/60 p-4 text-sm leading-relaxed outline-none transition-colors focus:border-cobalt-400 focus:bg-white focus:ring-4 focus:ring-cobalt-100"
       />
       <p className="mt-1.5 text-right font-mono text-[11px] text-slate-400">
         {value.length.toLocaleString("fr-FR")} caractères

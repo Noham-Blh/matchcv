@@ -1,5 +1,7 @@
 "use client";
 
+import { Target } from "lucide-react";
+
 interface JobOfferInputProps {
   value: string;
   onChange: (text: string) => void;
@@ -19,20 +21,25 @@ export function JobOfferInput({
 }: JobOfferInputProps) {
   return (
     <div>
-      <label className="mb-3 block text-sm font-medium">Offre d&apos;emploi visée</label>
+      <div className="mb-3 flex items-center gap-2">
+        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-match/30 text-ink">
+          <Target className="h-3.5 w-3.5" />
+        </span>
+        <label className="text-sm font-medium">Offre d&apos;emploi visée</label>
+      </div>
 
       <div className="mb-3 grid grid-cols-2 gap-3">
         <input
           value={jobTitle}
           onChange={(e) => onJobTitleChange(e.target.value)}
           placeholder="Intitulé du poste"
-          className="rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none focus:border-ink"
+          className="rounded-xl border border-line bg-paper-dim/60 px-3.5 py-2.5 text-sm outline-none transition-colors focus:border-cobalt-400 focus:bg-white focus:ring-4 focus:ring-cobalt-100"
         />
         <input
           value={companyName}
           onChange={(e) => onCompanyNameChange(e.target.value)}
           placeholder="Nom de l'entreprise"
-          className="rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none focus:border-ink"
+          className="rounded-xl border border-line bg-paper-dim/60 px-3.5 py-2.5 text-sm outline-none transition-colors focus:border-cobalt-400 focus:bg-white focus:ring-4 focus:ring-cobalt-100"
         />
       </div>
 
@@ -41,7 +48,7 @@ export function JobOfferInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder="Collez ici le texte complet de l'offre d'emploi..."
         rows={11}
-        className="w-full resize-none rounded-xl border border-line bg-white p-4 text-sm leading-relaxed outline-none focus:border-ink"
+        className="w-full resize-none rounded-xl border border-line bg-paper-dim/60 p-4 text-sm leading-relaxed outline-none transition-colors focus:border-cobalt-400 focus:bg-white focus:ring-4 focus:ring-cobalt-100"
       />
       <p className="mt-1.5 text-right font-mono text-[11px] text-slate-400">
         {value.length.toLocaleString("fr-FR")} caractères
