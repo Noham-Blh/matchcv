@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 /**
@@ -16,6 +16,11 @@ export function useLiveCredits(userId: string, initialCredits: number, initialHa
   const [credits, setCredits] = useState(initialCredits);
   const [hasSubscription, setHasSubscription] = useState(initialHasSubscription);
 
+  // Suffixe unique par instance : plusieurs composants (badge + texte du dashboard)
+  // peuvent s'abonner en même temps pour le même utilisateur — chacun a besoin de
+  // son propre canal, sinon Supabase Realtime refuse le second abonnement.
+  const instanceId = useRef(Math.random().toString(36).slice(2)).current;
+
   useEffect(() => {
     setCredits(initialCredits);
     setHasSubscription(initialHasSubscription);
@@ -27,7 +32,7 @@ export function useLiveCredits(userId: string, initialCredits: number, initialHa
     const supabase = createClient();
 
     const channel = supabase
-      .channel(`profile-credits-${userId}`)
+      .channel(`profile-credits-${userId}-${instanceId}`)
       .on(
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "profiles", filter: `id=eq.${userId}` },
@@ -42,7 +47,7 @@ export function useLiveCredits(userId: string, initialCredits: number, initialHa
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [userId]);
+  }, [userId, instanceId]);
 
   return { credits, hasSubscription };
 }
