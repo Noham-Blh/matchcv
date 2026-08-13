@@ -84,9 +84,18 @@ export default function ConfidentialitePage() {
         <section>
           <h2 className="font-display text-base font-semibold text-ink">7. Cookies</h2>
           <p className="mt-2">
-            MatchCV utilise uniquement des cookies techniques strictement nécessaires au fonctionnement
-            du service (maintien de votre session de connexion). Aucun cookie publicitaire ou de
-            traçage tiers n&apos;est utilisé.
+            MatchCV utilise des cookies techniques strictement nécessaires au fonctionnement du service
+            (maintien de votre session de connexion).
+          </p>
+          <p className="mt-2">
+            Un second cookie, purement technique lui aussi, sert uniquement à compter les visites de
+            façon anonyme (un identifiant aléatoire et la page consultée, sans aucune information
+            permettant de vous identifier). Il permet d&apos;établir des statistiques globales de
+            fréquentation du site et n&apos;est jamais utilisé à des fins publicitaires ni transmis à des
+            tiers.
+          </p>
+          <p className="mt-2">
+            Aucun cookie publicitaire ou de traçage tiers n&apos;est utilisé.
           </p>
         </section>
       </div>
