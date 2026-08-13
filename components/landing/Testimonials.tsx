@@ -46,7 +46,7 @@ export function Testimonials() {
           {TESTIMONIALS.map((t) => (
             <div
               key={t.name}
-              className="flex flex-col justify-between overflow-hidden rounded-2xl border border-line bg-white shadow-card"
+              className="flex flex-col justify-between overflow-hidden rounded-[28px] bg-white shadow-elevated transition-transform duration-300 hover:-translate-y-1.5"
             >
               <div className={`h-1.5 w-full ${t.accent}`} />
               <div className="flex flex-1 flex-col justify-between p-7 pt-6">

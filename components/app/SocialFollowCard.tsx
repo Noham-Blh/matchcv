@@ -76,7 +76,7 @@ export function SocialFollowCard({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
+    <div className="overflow-hidden rounded-[28px] bg-white shadow-elevated">
       <div className="h-1.5 w-full bg-match" />
       <div className="p-6">
         <div className="flex items-center gap-2.5">

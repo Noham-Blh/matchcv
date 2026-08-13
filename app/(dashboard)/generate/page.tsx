@@ -69,7 +69,7 @@ export default function GeneratePage() {
       </div>
 
       <div className="relative grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-line bg-white p-6 shadow-card">
+        <div className="rounded-[28px] bg-white p-6 shadow-elevated">
           <CVUploader value={cvText} onChange={setCvText} />
         </div>
 
@@ -80,7 +80,7 @@ export default function GeneratePage() {
           </span>
         </div>
 
-        <div className="rounded-2xl border border-line bg-white p-6 shadow-card">
+        <div className="rounded-[28px] bg-white p-6 shadow-elevated">
           <JobOfferInput
             value={jobOfferText}
             onChange={setJobOfferText}
@@ -92,7 +92,7 @@ export default function GeneratePage() {
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col items-start gap-4 rounded-2xl border border-line bg-white p-5 shadow-card sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-6 flex flex-col items-start gap-4 rounded-[28px] bg-white p-5 shadow-elevated sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <button
             onClick={handleGenerate}

@@ -68,8 +68,8 @@ export function Pricing() {
               key={plan.name}
               className={
                 plan.highlighted
-                  ? "relative rounded-2xl border-2 border-ink bg-ink p-8 text-white shadow-[0_20px_50px_-15px_rgba(198,255,61,0.35)]"
-                  : "relative rounded-2xl border border-line bg-white p-8 shadow-card"
+                  ? "relative rounded-[28px] bg-ink p-8 text-white shadow-lift transition-transform duration-300 hover:-translate-y-1.5"
+                  : "relative rounded-[28px] bg-white p-8 shadow-elevated transition-transform duration-300 hover:-translate-y-1.5"
               }
             >
               {plan.highlighted && (

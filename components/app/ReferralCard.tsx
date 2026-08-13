@@ -14,7 +14,7 @@ export function ReferralCard({ referralCode, referralCount }: { referralCode: st
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
+    <div className="overflow-hidden rounded-[28px] bg-white shadow-elevated">
       <div className="h-1.5 w-full bg-cobalt-500" />
       <div className="p-6">
         <div className="flex items-center gap-2.5">

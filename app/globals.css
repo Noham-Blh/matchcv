@@ -34,7 +34,7 @@
     animation: highlight-in 0.5s ease-out both;
   }
   .kicker {
-    @apply font-mono text-xs uppercase tracking-[0.18em] text-cobalt-600;
+    @apply inline-block rounded-full bg-cobalt-50 px-3 py-1 text-xs font-medium tracking-wide text-cobalt-600;
   }
 }
 

@@ -37,7 +37,7 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <div className="mb-8 flex flex-col justify-between gap-5 overflow-hidden rounded-2xl border border-line bg-white p-6 shadow-card sm:flex-row sm:items-center sm:p-7">
+      <div className="mb-8 flex flex-col justify-between gap-5 overflow-hidden rounded-[28px] bg-white p-6 shadow-elevated sm:flex-row sm:items-center sm:p-7">
         <div>
           <h1 className="font-display text-2xl font-semibold tracking-tight">
             Bonjour {profile?.full_name?.split(" ")[0] || ""} 👋
@@ -69,7 +69,7 @@ export default async function DashboardPage() {
       </div>
 
       {!generations || generations.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-line bg-white p-12 text-center">
+        <div className="rounded-[28px] border border-dashed border-line bg-white p-12 text-center">
           <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-cobalt-50">
             <FileText className="h-6 w-6 text-cobalt-500" />
           </span>
@@ -84,7 +84,7 @@ export default async function DashboardPage() {
           </Link>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
+        <div className="overflow-hidden rounded-[28px] bg-white shadow-elevated">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-line bg-paper-dim text-left font-mono text-[11px] uppercase tracking-wide text-slate-500">

@@ -71,6 +71,8 @@ const config: Config = {
       },
       boxShadow: {
         card: "0 1px 2px rgba(18,20,28,0.04), 0 8px 24px -8px rgba(18,20,28,0.10)",
+        elevated: "0 2px 6px rgba(18,20,28,0.04), 0 24px 48px -16px rgba(18,20,28,0.16)",
+        lift: "0 4px 10px rgba(18,20,28,0.06), 0 32px 60px -16px rgba(18,20,28,0.22)",
       },
     },
   },
