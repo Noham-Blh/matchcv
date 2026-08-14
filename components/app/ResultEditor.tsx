@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import clsx from "clsx";
-import { Download, Loader2 } from "lucide-react";
+import { Download, Loader2, Share2 } from "lucide-react";
 import { downloadAsPdf } from "@/lib/pdf/generate";
 import { CvVisualEditor } from "@/components/app/CvVisualEditor";
 import type { ClaudeGenerationResult } from "@/lib/types";
@@ -33,6 +33,25 @@ export function ResultEditor({ result, jobTitle }: ResultEditorProps) {
     }
   }
 
+  async function handleShare() {
+    const text = `Je viens de faire passer mon CV de ${result.matchScore}% de compatibilité ATS avec MatchCV 🎯`;
+    const url = "https://matchcv.fr";
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ text, url });
+      } catch {
+        // L'utilisateur a annulé le partage, on ne fait rien.
+      }
+    } else {
+      window.open(
+        `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }
+  }
+
   return (
     <div className="overflow-hidden rounded-[28px] bg-white shadow-elevated">
       {/* En-tête : score + mots-clés */}
@@ -45,6 +64,12 @@ export function ResultEditor({ result, jobTitle }: ResultEditorProps) {
             <p className="text-sm font-medium">Score de correspondance ATS</p>
             <p className="text-xs text-slate-500">Basé sur les mots-clés de l&apos;offre retrouvés dans votre profil</p>
           </div>
+          <button
+            onClick={handleShare}
+            className="ml-2 flex items-center gap-1.5 rounded-full bg-paper-dim px-3 py-1.5 text-xs font-medium hover:bg-line"
+          >
+            <Share2 className="h-3.5 w-3.5" /> Partager
+          </button>
         </div>
 
         <div className="flex flex-wrap gap-1.5 sm:max-w-xs sm:justify-end">
