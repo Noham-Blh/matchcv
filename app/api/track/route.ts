@@ -19,6 +19,21 @@ export async function POST(request: Request) {
     }
 
     const adminClient = createAdminClient();
+
+    // Protection anti-abus : si ce visiteur a déjà généré plus de 60 visites
+    // dans les 5 dernières minutes, on ignore (navigation normale très généreuse,
+    // mais bloque le spam automatisé de cette route).
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const { count } = await adminClient
+      .from("page_views")
+      .select("id", { count: "exact", head: true })
+      .eq("visitor_id", visitorId)
+      .gte("created_at", fiveMinutesAgo);
+
+    if ((count ?? 0) > 60) {
+      return NextResponse.json({ success: false });
+    }
+
     await adminClient.from("page_views").insert({ path, visitor_id: visitorId });
 
     return NextResponse.json({ success: true });

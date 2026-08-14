@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -24,6 +24,8 @@ function SignupForm() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [website, setWebsite] = useState(""); // Piège à robots (champ invisible pour un humain)
+  const loadedAt = useRef(Date.now());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<"form" | "code">("form");
@@ -44,6 +46,14 @@ function SignupForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    // Piège à robots : un humain ne remplit jamais ce champ (il est invisible).
+    // Un formulaire rempli en moins de 1,5s est aussi suspect (bien plus rapide qu'un humain).
+    if (website.length > 0 || Date.now() - loadedAt.current < 1500) {
+      setError("Une erreur est survenue. Merci de réessayer.");
+      setLoading(false);
+      return;
+    }
 
     if (password.length < 8) {
       setError("Le mot de passe doit contenir au moins 8 caractères.");
@@ -161,6 +171,17 @@ function SignupForm() {
       )}
 
       <form onSubmit={handleSignup} className="mt-7 space-y-4">
+        {/* Champ piège invisible pour les robots — ne pas retirer */}
+        <input
+          type="text"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+          className="absolute left-[-9999px] h-0 w-0 opacity-0"
+          aria-hidden="true"
+        />
+
         <div>
           <label className="text-xs font-medium text-slate-600">Nom complet</label>
           <input
