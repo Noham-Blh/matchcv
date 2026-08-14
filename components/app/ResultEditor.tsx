@@ -4,6 +4,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import { Download, Loader2 } from "lucide-react";
 import { downloadAsPdf } from "@/lib/pdf/generate";
+import { CvVisualEditor } from "@/components/app/CvVisualEditor";
 import type { ClaudeGenerationResult } from "@/lib/types";
 
 interface ResultEditorProps {
@@ -33,7 +34,7 @@ export function ResultEditor({ result, jobTitle }: ResultEditorProps) {
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-white shadow-card">
+    <div className="overflow-hidden rounded-[28px] bg-white shadow-elevated">
       {/* En-tête : score + mots-clés */}
       <div className="flex flex-col gap-5 border-b border-line p-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
@@ -93,18 +94,13 @@ export function ResultEditor({ result, jobTitle }: ResultEditorProps) {
       {/* Contenu éditable */}
       <div className="p-6">
         {tab === "cv" ? (
-          <textarea
-            value={cvText}
-            onChange={(e) => setCvText(e.target.value)}
-            rows={22}
-            className="w-full resize-none rounded-xl border border-line bg-paper-dim p-4 font-mono text-[12.5px] leading-relaxed outline-none focus:border-ink"
-          />
+          <CvVisualEditor value={cvText} onChange={setCvText} />
         ) : (
           <textarea
             value={letterText}
             onChange={(e) => setLetterText(e.target.value)}
             rows={22}
-            className="w-full resize-none rounded-xl border border-line bg-paper-dim p-4 text-sm leading-relaxed outline-none focus:border-ink"
+            className="w-full resize-none rounded-[28px] border-0 bg-paper-dim p-6 text-sm leading-relaxed outline-none focus:bg-cobalt-50/40"
           />
         )}
       </div>
