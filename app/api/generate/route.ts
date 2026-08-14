@@ -64,6 +64,8 @@ export async function POST(request: Request) {
       generated_cv: result.optimizedCv,
       generated_cover_letter: result.coverLetter,
       match_score: result.matchScore,
+      matched_keywords: result.matchedKeywords || [],
+      missing_keywords: result.missingKeywords || [],
       template: "classic",
     });
 

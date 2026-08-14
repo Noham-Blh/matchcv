@@ -89,8 +89,9 @@ export default async function DashboardPage() {
             <span className="w-24 text-right">Date</span>
           </div>
           {generations.map((g) => (
-            <div
+            <Link
               key={g.id}
+              href={`/dashboard/${g.id}`}
               className="flex items-center border-b border-line px-2 py-4 last:border-0 hover:bg-white/60"
             >
               <div className="flex-1 pr-4">
@@ -110,7 +111,7 @@ export default async function DashboardPage() {
                   year: "numeric",
                 })}
               </span>
-            </div>
+            </Link>
           ))}
         </div>
       )}
