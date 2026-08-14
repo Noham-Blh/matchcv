@@ -18,7 +18,7 @@ export interface AdminUserRow {
 
 export function UsersTable({ users }: { users: AdminUserRow[] }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-line bg-white shadow-card">
+    <div className="overflow-x-auto rounded-[28px] bg-white shadow-elevated">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-line bg-paper-dim text-left font-mono text-[11px] uppercase tracking-wide text-slate-500">
