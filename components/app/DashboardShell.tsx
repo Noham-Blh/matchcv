@@ -13,6 +13,7 @@ import {
   ChevronsUpDown,
   LogOut,
   FileText,
+  UserCog,
 } from "lucide-react";
 import clsx from "clsx";
 import { createClient } from "@/lib/supabase/client";
@@ -193,6 +194,13 @@ function AccountMenu({
             <p className="truncate text-xs text-slate-500">{email}</p>
           </div>
           <div className="my-1 border-t border-line" />
+          <Link
+            href="/compte"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-slate-700 hover:bg-paper-dim"
+          >
+            <UserCog className="h-4 w-4" /> Mon compte
+          </Link>
           <Link
             href="/billing"
             onClick={() => setOpen(false)}
