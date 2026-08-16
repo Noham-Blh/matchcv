@@ -6,6 +6,7 @@ import { Sparkles, Loader2, AlertCircle } from "lucide-react";
 import { CVUploader } from "@/components/app/CVUploader";
 import { JobOfferInput } from "@/components/app/JobOfferInput";
 import { ResultEditor } from "@/components/app/ResultEditor";
+import { GeneratingState } from "@/components/app/GeneratingState";
 import type { ClaudeGenerationResult } from "@/lib/types";
 
 export default function GeneratePage() {
@@ -105,6 +106,8 @@ export default function GeneratePage() {
           </div>
         </div>
       )}
+
+      {loading && <GeneratingState />}
 
       {result && (
         <div className="mt-8">
