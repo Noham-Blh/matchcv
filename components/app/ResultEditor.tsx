@@ -10,9 +10,10 @@ import type { ClaudeGenerationResult } from "@/lib/types";
 interface ResultEditorProps {
   result: ClaudeGenerationResult;
   jobTitle: string;
+  suggestedThemeId?: string;
 }
 
-export function ResultEditor({ result, jobTitle }: ResultEditorProps) {
+export function ResultEditor({ result, jobTitle, suggestedThemeId }: ResultEditorProps) {
   const [tab, setTab] = useState<"cv" | "letter">("cv");
   const [cvText, setCvText] = useState(result.optimizedCv);
   const [letterText, setLetterText] = useState(result.coverLetter);
@@ -126,6 +127,7 @@ export function ResultEditor({ result, jobTitle }: ResultEditorProps) {
           <CvVisualEditor
             value={cvText}
             onChange={setCvText}
+            suggestedThemeId={suggestedThemeId}
             onCustomizationChange={(photo, theme) => {
               setPhotoUrl(photo);
               setThemeId(theme);

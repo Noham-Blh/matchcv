@@ -10,10 +10,15 @@ export function CvVisualEditor({
   value,
   onChange,
   onCustomizationChange,
+  suggestedThemeId,
 }: {
   value: string;
   onChange: (next: string) => void;
   onCustomizationChange?: (photoUrl: string | null, themeId: string) => void;
+  /** Couleur suggérée par l'IA selon le secteur visé — utilisée uniquement
+   * comme point de départ pour une NOUVELLE génération, jamais pour écraser
+   * un choix déjà enregistré quand on rouvre un ancien CV. */
+  suggestedThemeId?: string;
 }) {
   const parsed = useMemo(() => parseCvContent(value), [value]);
   const [showRaw, setShowRaw] = useState(false);
@@ -42,8 +47,9 @@ export function CvVisualEditor({
 
       if (profile) {
         setPhotoUrl(profile.photo_url);
-        setThemeId(profile.cv_theme || "cobalt");
-        onCustomizationChange?.(profile.photo_url, profile.cv_theme || "cobalt");
+        const initialTheme = suggestedThemeId || profile.cv_theme || "cobalt";
+        setThemeId(initialTheme);
+        onCustomizationChange?.(profile.photo_url, initialTheme);
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -172,7 +178,12 @@ export function CvVisualEditor({
         </div>
 
         <div>
-          <p className="mb-2 text-xs font-medium text-slate-700">Couleur du CV</p>
+          <p className="mb-2 text-xs font-medium text-slate-700">
+            Couleur du CV
+            {suggestedThemeId && themeId === suggestedThemeId && (
+              <span className="ml-1.5 font-normal text-cobalt-600">✨ suggérée pour ce secteur</span>
+            )}
+          </p>
           <div className="flex gap-2">
             {CV_THEMES.map((t) => (
               <button

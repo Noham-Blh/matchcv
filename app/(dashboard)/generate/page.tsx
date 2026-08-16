@@ -111,7 +111,7 @@ export default function GeneratePage() {
 
       {result && (
         <div className="mt-8">
-          <ResultEditor result={result} jobTitle={jobTitle} />
+          <ResultEditor result={result} jobTitle={jobTitle} suggestedThemeId={result.suggestedTheme} />
         </div>
       )}
     </div>

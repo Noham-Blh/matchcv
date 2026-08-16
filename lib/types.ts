@@ -36,6 +36,7 @@ export interface ClaudeGenerationResult {
   matchScore: number;
   matchedKeywords: string[];
   missingKeywords: string[];
+  suggestedTheme?: string;
 }
 
 export interface SocialFollowRequest {

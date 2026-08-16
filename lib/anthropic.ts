@@ -26,13 +26,22 @@ Règles impératives sur la mise en forme du CV (champ "optimizedCv"), pour qu'i
 - Reste concis : vise un total d'environ 380 à 480 mots pour l'ensemble du CV (hors nom/coordonnées). Priorise les expériences les plus pertinentes pour l'offre plutôt que d'être exhaustif ; c'est un CV d'une page, pas un CV complet.
 - N'utilise aucune autre forme de mise en forme (pas de markdown gras/italique, pas de tableaux).
 
+Choix de la couleur du CV (champ "suggestedTheme") : en fonction du secteur/poste visé par l'offre, choisis LA couleur la plus adaptée parmi cette liste exacte (réponds uniquement avec l'un de ces identifiants) :
+- "cobalt" (bleu moderne) : tech, digital, startups, généraliste
+- "ink" (noir intense, très sobre) : droit, finance traditionnelle, postes très formels
+- "emerald" (vert) : environnement, santé, RSE, secteurs en croissance
+- "burgundy" (bordeaux) : luxe, direction, postes seniors/executive
+- "slate" (gris-bleu discret) : conseil, audit, corporate classique
+- "amber" (ambre/orange) : créatif, hôtellerie-restauration, commerce, communication
+
 Tu dois répondre UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, ni bloc markdown, au format exact suivant :
 {
   "optimizedCv": "texte complet du CV réécrit selon la mise en forme ci-dessus, avec sauts de ligne \\n",
   "coverLetter": "texte complet de la lettre de motivation",
   "matchScore": 0,
   "matchedKeywords": ["mot-clé 1", "mot-clé 2"],
-  "missingKeywords": ["compétence manquante 1"]
+  "missingKeywords": ["compétence manquante 1"],
+  "suggestedTheme": "cobalt"
 }`;
 
 export async function generateOptimizedApplication(
@@ -67,6 +76,11 @@ export async function generateOptimizedApplication(
 
   if (!parsed.optimizedCv || !parsed.coverLetter) {
     throw new Error("La génération est incomplète. Merci de réessayer.");
+  }
+
+  const validThemes = ["cobalt", "ink", "emerald", "burgundy", "slate", "amber"];
+  if (!validThemes.includes(parsed.suggestedTheme || "")) {
+    parsed.suggestedTheme = "cobalt";
   }
 
   return parsed;
