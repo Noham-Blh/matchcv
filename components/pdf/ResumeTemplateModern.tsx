@@ -1,5 +1,6 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import { parseCvContent } from "@/lib/pdf/parseCvContent";
+import { getCvTheme } from "@/lib/cvThemes";
 
 function scaleFor(content: string) {
   const len = content.length;
@@ -8,22 +9,34 @@ function scaleFor(content: string) {
   return { base: 9.75, heading: 12.5, sub: 10.75, gap: 12, bulletGap: 4 };
 }
 
-export function ResumeTemplateModern({ title, content }: { title: string; content: string }) {
+export function ResumeTemplateModern({
+  title,
+  content,
+  photoUrl,
+  themeId,
+}: {
+  title: string;
+  content: string;
+  photoUrl?: string | null;
+  themeId?: string | null;
+}) {
   const { name, contact, blocks } = parseCvContent(content);
   const scale = scaleFor(content);
+  const theme = getCvTheme(themeId);
 
   const styles = StyleSheet.create({
     page: { flexDirection: "row", fontFamily: "Helvetica", fontSize: scale.base, color: "#1A1D26" },
-    sidebar: { width: 130, backgroundColor: "#12141C", padding: 22, color: "#FFFFFF", minHeight: "100%" },
-    sidebarLabel: { fontSize: 7.5, color: "#C6FF3D", marginBottom: 4, letterSpacing: 1 },
-    sidebarTitle: { fontSize: 15, fontFamily: "Helvetica-Bold", marginBottom: 10, lineHeight: 1.25 },
-    sidebarContact: { fontSize: 8, color: "#B4C0F5", lineHeight: 1.6 },
+    sidebar: { width: 130, backgroundColor: "#12141C", padding: 22, color: "#FFFFFF", minHeight: "100%", alignItems: "center" },
+    photo: { width: 68, height: 68, borderRadius: 34, marginBottom: 14, border: `2pt solid ${theme.accent}` },
+    sidebarLabel: { fontSize: 7.5, color: theme.accent, marginBottom: 4, letterSpacing: 1, alignSelf: "flex-start" },
+    sidebarTitle: { fontSize: 15, fontFamily: "Helvetica-Bold", marginBottom: 10, lineHeight: 1.25, alignSelf: "flex-start" },
+    sidebarContact: { fontSize: 8, color: "#B4C0F5", lineHeight: 1.6, alignSelf: "flex-start" },
     main: { flex: 1, padding: 26, lineHeight: 1.45 },
-    accent: { width: 22, height: 3, backgroundColor: "#C6FF3D", marginBottom: 14 },
+    accentBar: { width: 22, height: 3, backgroundColor: theme.accent, marginBottom: 14 },
     heading: {
       fontSize: scale.heading,
       fontFamily: "Helvetica-Bold",
-      color: "#2E3FB0",
+      color: theme.accent,
       marginTop: scale.gap,
       marginBottom: 4,
       textTransform: "uppercase",
@@ -40,12 +53,13 @@ export function ResumeTemplateModern({ title, content }: { title: string; conten
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.sidebar}>
+          {photoUrl ? <Image src={photoUrl} style={styles.photo} /> : null}
           <Text style={styles.sidebarLabel}>CANDIDATURE</Text>
           <Text style={styles.sidebarTitle}>{name || title || "Curriculum Vitae"}</Text>
           {contact ? <Text style={styles.sidebarContact}>{contact.split(" · ").join("\n")}</Text> : null}
         </View>
         <View style={styles.main}>
-          <View style={styles.accent} />
+          <View style={styles.accentBar} />
           {blocks.map((block, i) => {
             if (block.type === "heading") return <Text key={i} style={styles.heading}>{block.text}</Text>;
             if (block.type === "subheading") return <Text key={i} style={styles.subheading}>{block.text}</Text>;

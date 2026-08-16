@@ -18,6 +18,8 @@ export function ResultEditor({ result, jobTitle }: ResultEditorProps) {
   const [letterText, setLetterText] = useState(result.coverLetter);
   const [template, setTemplate] = useState<"classic" | "modern">("classic");
   const [downloading, setDownloading] = useState<"cv" | "letter" | null>(null);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [themeId, setThemeId] = useState<string>("cobalt");
 
   async function handleDownload(type: "cv" | "letter") {
     setDownloading(type);
@@ -26,7 +28,9 @@ export function ResultEditor({ result, jobTitle }: ResultEditorProps) {
         type === "cv" ? cvText : letterText,
         type === "cv" ? jobTitle || "CV" : `Lettre de motivation — ${jobTitle || ""}`,
         template,
-        type === "cv" ? "cv-matchcv.pdf" : "lettre-motivation-matchcv.pdf"
+        type === "cv" ? "cv-matchcv.pdf" : "lettre-motivation-matchcv.pdf",
+        type === "cv" ? photoUrl : null,
+        themeId
       );
     } finally {
       setDownloading(null);
@@ -119,7 +123,14 @@ export function ResultEditor({ result, jobTitle }: ResultEditorProps) {
       {/* Contenu éditable */}
       <div className="p-6">
         {tab === "cv" ? (
-          <CvVisualEditor value={cvText} onChange={setCvText} />
+          <CvVisualEditor
+            value={cvText}
+            onChange={setCvText}
+            onCustomizationChange={(photo, theme) => {
+              setPhotoUrl(photo);
+              setThemeId(theme);
+            }}
+          />
         ) : (
           <textarea
             value={letterText}

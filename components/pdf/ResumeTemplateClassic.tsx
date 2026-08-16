@@ -1,9 +1,7 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import { parseCvContent } from "@/lib/pdf/parseCvContent";
+import { getCvTheme } from "@/lib/cvThemes";
 
-// Ajuste automatiquement la taille du texte selon la longueur du contenu,
-// pour que le CV tienne sur une seule page A4 même si la génération est
-// un peu plus longue que prévu.
 function scaleFor(content: string) {
   const len = content.length;
   if (len > 2600) return { base: 8.75, heading: 11.5, sub: 9.75, gap: 9, bulletGap: 3 };
@@ -11,19 +9,39 @@ function scaleFor(content: string) {
   return { base: 10, heading: 13.5, sub: 11, gap: 13, bulletGap: 4 };
 }
 
-export function ResumeTemplateClassic({ title, content }: { title: string; content: string }) {
+export function ResumeTemplateClassic({
+  title,
+  content,
+  photoUrl,
+  themeId,
+}: {
+  title: string;
+  content: string;
+  photoUrl?: string | null;
+  themeId?: string | null;
+}) {
   const { name, contact, blocks } = parseCvContent(content);
   const scale = scaleFor(content);
+  const theme = getCvTheme(themeId);
 
   const styles = StyleSheet.create({
     page: { padding: 42, fontSize: scale.base, fontFamily: "Helvetica", color: "#1A1D26", lineHeight: 1.45 },
-    header: { marginBottom: 16, borderBottom: "2pt solid #12141C", paddingBottom: 10 },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 16,
+      marginBottom: 16,
+      borderBottom: `2pt solid ${theme.accent}`,
+      paddingBottom: 10,
+    },
+    photo: { width: 58, height: 58, borderRadius: 29 },
+    headerText: { flex: 1 },
     name: { fontSize: 21, fontFamily: "Helvetica-Bold", marginBottom: 3 },
     subtitle: { fontSize: scale.base - 0.5, color: "#4C5162" },
     heading: {
       fontSize: scale.heading,
       fontFamily: "Helvetica-Bold",
-      color: "#2E3FB0",
+      color: theme.accent,
       marginTop: scale.gap,
       marginBottom: 4,
       textTransform: "uppercase",
@@ -41,8 +59,11 @@ export function ResumeTemplateClassic({ title, content }: { title: string; conte
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.name}>{name || title || "Curriculum Vitae"}</Text>
-          {contact ? <Text style={styles.subtitle}>{contact}</Text> : null}
+          {photoUrl ? <Image src={photoUrl} style={styles.photo} /> : null}
+          <View style={styles.headerText}>
+            <Text style={styles.name}>{name || title || "Curriculum Vitae"}</Text>
+            {contact ? <Text style={styles.subtitle}>{contact}</Text> : null}
+          </View>
         </View>
 
         {blocks.map((block, i) => {

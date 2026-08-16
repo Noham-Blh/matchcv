@@ -6,12 +6,14 @@ export async function downloadAsPdf(
   content: string,
   title: string,
   template: "classic" | "modern",
-  filename: string
+  filename: string,
+  photoUrl?: string | null,
+  themeId?: string | null
 ) {
   const doc =
     template === "modern"
-      ? ResumeTemplateModern({ title, content })
-      : ResumeTemplateClassic({ title, content });
+      ? ResumeTemplateModern({ title, content, photoUrl, themeId })
+      : ResumeTemplateClassic({ title, content, photoUrl, themeId });
 
   const blob = await pdf(doc).toBlob();
   const url = URL.createObjectURL(blob);
